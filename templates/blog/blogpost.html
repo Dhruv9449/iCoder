@@ -2,6 +2,52 @@
 
 {% block title %} Blogs Post {% endblock title %}
 
+{% block blogactive %}active{% endblock blogactive %}
+
 {% block body %}
-Welcome to blogpost
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 blog-main">
+
+            <div class="blog-post">
+                <h1 class="blog-post-title"><b>{{post.title}}</b></h1>
+                <p class="blog-post-meta">{{post.upload_date}} by
+                <a href="#"> Dhruv Shah </a>
+                </p>
+                <p>{{post.content}}</p>
+            </div>
+
+            <br>
+        </div>
+        <!-- /.blog-main -->
+
+        <aside class="col-md-4 blog-sidebar">
+            <div class="p-3 mb-3 bg-light rounded">
+                <h4 class="font-italic">About</h4>
+                <p class="mb-0"> <a href='/#Dhruv'>Dhruv Shah</a> is a python
+                developer who's enthusistic about <em> Web development </em> and <em> Data Science </em> </p>
+            </div>
+
+
+            <div class="p-3">
+                <h4 class="font-italic"> Contact me on: </h4>
+                <ol class="list-unstyled">
+                <li>
+                    <a href="#">GitHub</a>
+                </li>
+                <li>
+                    <a href="#">Linkedin</a>
+                </li>
+                <li>
+                    <a href="#">Instagram</a>
+                </li>
+                </ol>
+            </div>
+        </aside>
+        <!-- /.blog-sidebar -->
+
+    </div>
+</div>
+
 {% endblock body %}
