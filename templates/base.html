@@ -1,80 +1,237 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title> Dhruv Shah - {% block title %}{% endblock title %}</title>
-  </head>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+    integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 
-  <body>
+  <title> Dhruv Shah - {% block title %}{% endblock title %}</title>
+</head>
+
+<body>
+
+  <!-- Nav bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/"> iCoder </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mx-auto">
+
+        <li class="nav-item {% block homeactive %}{% endblock homeactive %}">
+          <a class="nav-link" href="/"> Home <span class="sr-only">(current)</span></a>
+        </li>
+
+        <li class="nav-item {% block aboutactive %}{% endblock aboutactive %}">
+          <a class="nav-link" href="/about"> About </a>
+        </li>
+
+        <li class="nav-item {% block contactactive %}{% endblock contactactive %}">
+          <a class="nav-link" href="/contact"> Contact </a>
+        </li>
+
+        <li class="nav-item {% block projectsactive %}{% endblock projectsactive %}">
+          <a class="nav-link" href="/projects"> Projects </a>
+        </li>
+
+        <li class="nav-item {% block blogactive %}{% endblock blogactive %}">
+          <a class="nav-link" href="/blog"> Blog </a>
+        </li>
+      </ul>
 
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="/"> iCoder </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mx-auto">
+      {% if user.is_authenticated %}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+            Welcome {{request.user}}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/logout"> Logout</a>
+          </div>
+        </li>
+      </ul>
 
-            <li class="nav-item {% block homeactive %}{% endblock homeactive %}">
-              <a class="nav-link" href="/"> Home <span class="sr-only">(current)</span></a>
-            </li>
 
-            <li class="nav-item {% block aboutactive %}{% endblock aboutactive %}">
-              <a class="nav-link" href="/about"> About </a>
-            </li>
+      {% else %}
+      <a class="login_button nav-link" data-toggle="modal" data-target="#login_modal" name="login_button"
+        id="login_button"> Login </a>
+      {% endif %}
+      <style>
+        #login_button:hover {
+          color: white;
+          text-decoration: none;
+        }
 
-            <li class="nav-item {% block contactactive %}{% endblock contactactive %}">
-                <a class="nav-link" href="/contact"> Contact </a>
-            </li>
+        #login_button {
+          color: grey;
+          text-decoration: none;
+        }
+      </style>
 
-            <li class="nav-item {% block projectsactive %}{% endblock projectsactive %}">
-              <a class="nav-link" href="/projects"> Projects </a>
-            </li>
+    </div>
+  </nav>
 
-            <li class="nav-item {% block blogactive %}{% endblock blogactive %}">
-                <a class="nav-link" href="/blog"> Blog </a>
-            </li>
-          </ul>
 
-    
+  <!-- Alert messages -->
+  {% for message in messages %}
+  <div class="alert alert-{{ message.extra_tags.0 }} alert-dismissible fade show mb-0" role="alert">
+    <strong>{{ message.extra_tags.1 }}</strong> {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+
+
+  <!-- Login Modal -->
+  <!-- Button trigger modal 
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Launch demo modal
+</button> -->
+
+  <!--  Login Modal -->
+  <div class="modal fade" id="login_modal" tabindex="-1" aria-labelledby="login_modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-white">
+          <h5 class="modal-title w-100 text-center" id="exampleModalLabel"> Login </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-      </nav>
+        <div class="modal-body">
 
+          <form method="post" action="/login" name="login_form" id="login_form"> {% csrf_token %}
 
-      {% for message in messages %}
-      <div class="alert alert-{{ message.extra_tags.0 }} alert-dismissible fade show" role="alert">
-        <strong>{{ message.extra_tags.1 }}</strong> {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+            <div class="form-group">
+              <div class="form-group">
+                <label for="name"> Username </label>
+                <input type="text" class="form-control" id="login_username" name="login_username" placeholder="Username" required>
+              </div>
+
+              <div class="form-group">
+                <label for="password"> Password </label>
+                <input type="password" class="form-control" id="login_password" name="login_password" placeholder="Password"
+                  required>
+              </div>
+
+          </form>
+        </div>
+        <div class="modal-footer align-items-center">
+          <button type="submit" class="btn btn-primary" form="login_form"> Login </button>
+          <a class="signup_link" data-toggle="modal" data-target="#signup_modal" name="signup_link" id="signup_link"
+            data-dismiss="modal" aria-label="Close"> Sign up </a>
+        </div>
       </div>
-      {% endfor %}
+    </div>
+  </div>
+</div>
 
 
 
-    {% block body %}{% endblock body %}
-    {% block js %}{% endblock js %}
+  <!--  Sign-up Modal -->
+  <div class="modal fade" id="signup_modal" tabindex="-1" aria-labelledby="signup_modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-dark text-white">
+          <h5 class="modal-title w-100 text-center" id="exampleModalLabel"> Sign-up </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
 
-    <!-- Optional JavaScript; choose one of the two! -->
+          <form method="post" action="/signup" name="signup_form" id="signup_form"> {% csrf_token %}
 
-    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+            <div class="form-group">
+              <label for="first_name"> Name </label>
+              <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Full Name" maxlength="50"
+                required>
+            </div>
 
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
+            <div class="form-group">
+              <label for="last_name"> Name </label>
+              <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Full Name" maxlength="50"
+                required>
+            </div>
+
+            <div class="form-group">
+              <label for="name"> Userame </label>
+              <input type="text" class="form-control" id="signup_username" name="signup_username" placeholder="Username"
+                maxlength="25" required>
+            </div>
+
+            <div class="form-group">
+              <label for="email"> Email </label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="email" required>
+            </div>
+
+            <div class="form-group">
+              <label for="password"> Password </label>
+              <input type="password" class="form-control" id="signup_password" name="signup_password" placeholder="Password"
+                onkeyup="validatePassword();" onchange="validatePassword();" minlength="4" required>
+            </div>
+
+            <div class="form-group">
+              <label for="confirm_password"> Confirm Password </label>
+              <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                placeholder="Confirm Password" onkeyup="validatePassword();" onchange="validatePassword();" required>
+              <span id="check_password"> </span>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer align-items-center">
+          <button type="submit" class="btn btn-primary" form="signup_form" id="signup_button" disabled> Sign up </button>
+          <a class="signup_link" data-toggle="modal" data-target="#login_modal" name="login_link" id="login_link"
+            data-dismiss="modal" aria-label="Close"> Login </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  {% block body %}{% endblock body %}
+  {% block js %}{% endblock js %}
+
+  <!-- Optional JavaScript; choose one of the two! -->
+  <script>
+    function validatePassword() {
+      password = document.getElementById("signup_password"),
+        confirm_password = document.getElementById("confirm_password");
+      if (password.value != confirm_password.value) {
+        document.getElementById("check_password").innerHTML = `<p style="color: red;font-size: small;"> Passwords do not match! </p>`
+        document.getElementById("signup_button").disabled = true;
+      } else {
+        document.getElementById("check_password").innerHTML = `<p style="color: green;font-size: small;"> Passwords match </p>`
+        document.getElementById("signup_button").disabled = false;
+      }
+    }
+  </script>
+
+  <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+    crossorigin="anonymous"></script>
+
+  <!-- Option 2: Separate Popper and Bootstrap JS -->
+  <!--
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js" integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2" crossorigin="anonymous"></script>
     -->
-    
-  </body>
+
+</body>
+
 </html>

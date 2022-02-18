@@ -14,6 +14,8 @@ def blogHome(request):
 
 def blogPost(request, slug):
     post = Post.objects.filter(slug=slug).first()
+    post.views += 1
+    post.save()
     context = {'post': post}
     return render(request, "blog/blogpost.html", context)
 
