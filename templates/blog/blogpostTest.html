@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %} Blogs Post {% endblock title %}
+
+{% block blogactive %}active{% endblock blogactive %}
+
+{% block body %}
+
+{% load static %}
+{% load humanize %}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 blog-main">
+
+            <div class="blog-post">
+                <h2 class="blog-post-title"><b>{{post.title}}</b></h2>
+                <p style="margin-bottom:0;" class="blog-post-meta">{{post.upload_date}} by
+                    <a href="#"> Dhruv Shah </a>
+                </p>
+                <p style="font-size:0.9rem; color:grey;"> {{post.views}} views </p>
+                <p>{{post.content}}</p>
+            </div>
+
+            <br>
+            <hr>
+            <h3> Comments ({{comments.count}}) </h3>
+
+            {% if user.is_authenticated %}
+            <form action="/blog/postcomment" method="post"> {% csrf_token %}
+                <input type="hidden" name="post_sno" value="{{post.sno}}">
+                <input type="hidden" name="comment_sno" value="">
+                <div class="form-group">
+                    <label for="comment"> Add a comment </label>
+                    <input type="text" class="form-control" id="comment_input" name="comment_input"
+                        placeholder="Write a comment.." required>
+                </div>
+
+                <button type="submit" class="btn btn-dark" id="post_comment_button"> Post </button>
+                {% else %}
+                <p>Please <a data-toggle="modal" data-target="#login_modal" name="login_link" id="login_link"
+                        data-dismiss="modal" aria-label="Close" class="extended-link"> Log-in</a> to post a comment </p>
+                {% endif %}
+            </form>
+
+            {% for comment in post.blog_comments.all %}
+            <div class="row my-3">
+                <div class="col-md-2 mt-2 d-flex justify-content-center">
+                    <img src="/media/{{comment.user.profile.profile_picture}}"
+                        style="height:3rem;clip-path: fill-box circle();">
+                </div>
+
+                <div class="col-md-10">
+                    <b style="font-size:1.1rem;"> {{comment.user.username}} </b>
+                    <span style="font-size:0.7rem; color:grey; margin:0;"> {{comment.timestamp|naturaltime}} </span>
+                    <p> {{comment.comment}} </p>
+                    <div class="reply">
+                        
+                        <a class="btn btn-sm btn-dark mr-2" data-toggle="collapse" href="#replybox{{comment.sno}}"
+                            role="button" aria-expanded="false" aria-controls="replybox{{comment.sno}}">
+                            View replies
+                        </a>
+
+                        <a class="btn btn-sm btn-dark mx-2" data-toggle="collapse" href="#reply_form_box{{comment.sno}}"
+                            role="button" aria-expanded="false" aria-controls="reply_form_box{{comment.sno}}">
+                            Reply
+                        </a>
+
+                        <div class="collapse" id="reply_form_box{{comment.sno}}">
+                            <div class="card card-body my-2">
+                                {% if user.is_authenticated %}
+                                <form action="/blog/postcomment" method="post"> {% csrf_token %}
+                                    <input type="hidden" name="post_sno" value="{{post.sno}}">
+                                    <input type="hidden" name="comment_sno" value="{{comment.sno}}">
+                                    <div class="form-group">
+                                        <label for="comment"> Add a reply </label>
+                                        <input type="text" class="form-control" id="comment_input" name="comment_input"
+                                        placeholder="Write a reply.." required>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-dark" id="post_comment_button"> Post </button>
+                                </form>
+                                {% else %}
+                                <p>Please <a data-toggle="modal" data-target="#login_modal" name="login_link"
+                                id="login_link" data-dismiss="modal" aria-label="Close"
+                                class="extended-link"> Log-in</a> to post a comment </p>
+                                {% endif %}
+                                
+                            </div>
+                        </div>
+
+                        <div class="collapse" id="replybox{{comment.sno}}">
+                            {% for reply in comment.replies.all %}
+                                    <div class="row my-2">
+                                        <div class="col-md-2 mt-2 d-flex justify-content-center">
+                                            <img src="/media/{{reply.user.profile.profile_picture}}"
+                                                style="height:3rem;clip-path: fill-box circle();">
+                                        </div>
+                        
+                                        <div class="col-md-8">
+                                            <b style="font-size:1.1rem;"> {{reply.user.username}} </b>
+                                            <span style="font-size:0.7rem; color:grey; margin:0;"> {{reply.timestamp|naturaltime}} </span>
+                                            <p> {{reply.comment}} </p>
+                                        </div>
+                                    </div>
+                                
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div> 
+    
+    <!-- /.blog-main -->
+
+    <aside class="col-md-4 blog-sidebar">
+        <div class="p-3 mb-3 bg-light rounded">
+            <h4 class="font-italic">About</h4>
+            <p class="mb-0"> <a href='/#Dhruv'>Dhruv Shah</a> is a python
+                developer who's enthusistic about <em> Web development </em> and <em> Data Science </em> </p>
+        </div>
+
+
+        <div class="p-3">
+            <h4 class="font-italic"> Contact me on: </h4>
+            <ol class="list-unstyled">
+                <li>
+                    <a href="#">GitHub</a>
+                </li>
+                <li>
+                    <a href="#">Linkedin</a>
+                </li>
+                <li>
+                    <a href="#">Instagram</a>
+                </li>
+            </ol>
+        </div>
+    </aside>
+    <!-- /.blog-sidebar -->
+
+</div>
+</div>
+
+{% endblock body %}

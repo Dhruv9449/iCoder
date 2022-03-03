@@ -11,13 +11,15 @@
     integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 
   <title> Dhruv Shah - {% block title %}{% endblock title %}</title>
+
+  {% block head %}{% endblock head %}
 </head>
 
 <body>
 
   <!-- Nav bar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/"> iCoder </a>
+    <a class="navbar-brand" href="/"> DS </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -56,7 +58,14 @@
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="/logout"> Logout</a>
+            
+            {% if user.is_staff %}
+            <a class="dropdown-item" href="/blog/newpost"> New Post </a>
+            <a class="dropdown-item" href="/admin"> Admin settings </a>
+            {% endif %}
+
           </div>
+
         </li>
       </ul>
 
@@ -153,13 +162,13 @@
           <form method="post" action="/signup" name="signup_form" id="signup_form"> {% csrf_token %}
 
             <div class="form-group">
-              <label for="first_name"> Name </label>
+              <label for="first_name"> Fist Name </label>
               <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Full Name" maxlength="50"
                 required>
             </div>
 
             <div class="form-group">
-              <label for="last_name"> Name </label>
+              <label for="last_name"> Last Name </label>
               <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Full Name" maxlength="50"
                 required>
             </div>

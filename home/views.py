@@ -4,16 +4,13 @@ from blog.models import Post
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from home.extra_functions.send_message import send_message
 
 # Create your views here.
 
 
 def home(request):
-    if ('message' in request.session):
-        message = request.session['message']
-        messages.add_message(
-            request, messages.INFO, message['message_text'], extra_tags=message['extra_tags'])
-        del request.session['message']
+    send_message(request)
     posts = Post.objects.order_by('-views')[:2]
     projects = Project.objects.all()[:4]
     context = {'posts': posts, 'projects': projects}
@@ -21,10 +18,12 @@ def home(request):
 
 
 def about(request):
+    send_message(request)
     return render(request, "home/about.html")
 
 
 def contact(request):
+    send_message(request)
     if request.method == "POST":
         try:
             name = request.POST['name']
@@ -43,9 +42,11 @@ def contact(request):
 
 
 def projects(request):
+    send_message(request)
     return render(request, "home/projects.html")
 
 
+# Authentication APIs
 def handleSignup(request):
     if request.method == 'POST':
         username = request.POST['signup_username']
@@ -74,8 +75,6 @@ def handleSignup(request):
     else:
         return HttpResponse('404 -  Not Found')
     return redirect('/', {})
-
-# Authentication API
 
 
 def handleLogin(request):

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %} Blogs {% endblock title %}
+
+{% block blogactive %}active{% endblock blogactive %}
+
+{% block head %}
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin" rel="stylesheet"></script>
+
+<script>
+
+    tinymce.init({
+        selector: '#content',
+        height: 460,
+        plugins: [
+            'advlist autolink link image lists charmap print preview hr anchor pagebreak',
+            'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+            'table emoticons template paste help'
+        ],
+        toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
+            'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
+            'forecolor backcolor emoticons | help',
+        menu: {
+            favs: { title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons' }
+        },
+        menubar: 'favs file edit view insert format tools table help',
+        content_css: 'css/content.css'
+    });
+</script>
+
+{% endblock head %}
+
+{% block body %}
+<div class="container my-4">
+
+    <h3 class="my-4">
+        <span> New Post </span>
+        <!-- <button class="btn btn-dark float-right mx-2"> Preview </button> -->
+        <button class="btn btn-dark float-right" form="newpost_form" type="submit" id="post_submit"> Post </button>
+    </h3>
+        
+    <form method="post" action="/blog/newpost" name="newpost_form" id="newpost_form" enctype="multipart/form-data"> {% csrf_token %}
+        <div class="row">
+            <div class="col-md-9">
+                <label for="title"> Title </label>
+                <input class="form-control my-2" type="text" name="title" id="title" required>
+            </div>
+
+            <div class="col-md-3">
+                <label for="thumbnail"> Thumbnail </label>
+                <input type="file" class="form-control-file my-2" name="thumbnail" id="thumbnail" accept=".jpg, .jpeg, .png" required>
+            </div>
+        </div>
+        
+        <label for="description"> Description </label>
+        <textarea class="form-control my-2" name="description" id="description" cols="30" rows="3" required></textarea>
+
+        <label for="description" class="my-2"> Content </label>
+        <textarea id="content" name="content" required></textarea>
+
+    </form>
+</div>
+
+<style>
+    .form-control:focus {
+        border-color: black;
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 0, 0, 0.6);
+      }   
+
+</style>
+
+<script>
+    post_submit.addEventListener('click', (e)=>{
+        document.getElementById("content").value = tinyMCE.get("content").getContent();
+
+    });
+</script>
+
+{% endblock body %}

@@ -12,11 +12,18 @@
     <div class="row justify-content-end">
         <div class="col-4">
             <form class="form-inline" method="get" action="search/">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" name="query" id="search" aria-label="Search">
+                <input class="form-control mr-sm-2" type="search" placeholder="🔍 Search" name="query" id="search" aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
         </div>
     </div>
+
+    <style>
+        .form-control:focus {
+            border-color: green;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(40, 167, 69, 0.6);
+          }
+    </style>
 
     <h1>Checkout these blogs me :</h1> <br>
 
@@ -32,7 +39,7 @@
                 <p class="card-text mb-auto"> {{ post.desc|slice:":230"}} </p>
                 <a href="{{post.slug}}">Continue reading</a>
                 </div>
-                <img src="/media/{{ post.thumbnail }}" class="bd-placeholder-img card-img-right flex-auto d-none d-lg-block" width="200" height="210" style="object-fit: fill; object-position: right;"
+                <img src="/media/{{ post.thumbnail }}" class="bd-placeholder-img card-img-right flex-auto d-none d-lg-block" width="200" height="210" style="object-fit: cover; object-position: center;"
                 aria-label="Placeholder: Thumbnail"/>
             </div>
         </div>
