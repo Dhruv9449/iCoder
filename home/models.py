@@ -22,8 +22,13 @@ class Project(models.Model):
     sno = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     desc = models.TextField()
+    start_date = models.DateField()
+    finish_date = models.DateField()
     link = models.URLField(max_length=500)
-    thumbnail = models.ImageField(upload_to='home/images')
+    thumbnail = models.ImageField(upload_to='home/images', blank=True)
+    
+    def __str__(self):
+        return self.name
 
 
 def upload_location(instance, filename):

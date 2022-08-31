@@ -1,83 +1,111 @@
-{% extends 'base.html' %}
-
-{% block title %} Home {% endblock title %}
-
-{% block homeactive %}active{% endblock homeactive %}
-
-{% block body %}
+{% extends 'base.html' %} 
+{% block title %} Home {% endblock title %} 
+{% block homeactive %} active{% endblock homeactive %} 
+{% block body %} 
 {% load static %}
 
 <!-- Main profile -->
 <div class="jumbotron" name="Dhruv">
-    <div class="container my-4">
-        <div class="col-md-4 col-sm-4">
-        <h1 align="center"> Dhruv Shah </h1>
-        </div>
-        <hr class="my-4">
-        <div class="row">
-            <div class="col-md-5 col-sm-5">
-                <img src="{% static 'home/profile.jpeg' %}" width="400px" height="400px" style="object-fit: contain;">
-            </div>
-            <div class="col-md-7 col-sm-7">
-                <h4> this is how a column like this might look like Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum repudiandae nam accusantium, eaque, nihil corrupti at voluptatem saepe voluptate ullam aspernatur dolorem quo necessitatibus, illo voluptatum laborum. Cupiditate, nesciunt cumque.</h4>
-
-                <a class="btn btn-dark btn-lg position-absolute" href="/contact" role="button" style="bottom:0; left:20%; width:60%;color:"> Contact me </a>
-            </div>
-        </div>
+  <div class="container my-4">
+    <div class="col-md-4 col-sm-4">
+      <h1 align="center">Dhruv Shah</h1>
     </div>
+    <hr class="my-4" />
+    <div class="row">
+      <div class="col-md-5 col-sm-5">
+        <img
+          src="{% static 'home/profile.jpeg' %}"
+          width="400px"
+          height="400px"
+          style="object-fit: contain"
+        />
+      </div>
+      <div class="col-md-7 col-sm-7">
+        <h4>
+          I'm a CSE undergrad from Vellore Institute of Technology. I'm a
+          passionate programmer who's interested in Full Stack development, Data
+          Science and a bit of Competitive Coding. In my free time I like to
+          learn new tech stacks and implement them in my projects or take part
+          in hackathons.
+        </h4>
+        <a
+          class="btn btn-dark btn-lg position-absolute"
+          href="https://dhruvshah.ml/assets/About/Resume.pdf"
+          target="_blank"
+          role="button"
+          style="bottom: 0; left: 20%; width: 60%; color: "
+        >
+          Download Resume
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
 
-<br>
+<br />
 
 <!-- Project display -->
 <div class="container my-4">
-    <h2> Check out a few of my projects </h2>
-    <br>
-    <div class="row mb-2">
-        {% for project in projects %}
-        <div class="col-md-3">
-            <div class="card flex-md-row mb-4 shadow-sm h-md-250" href="#">
-                <div class="card-body d-flex flex-column align-items-center" style="height: 252px;">
-                    <h3 class="mt-auto mb-0">
-                        <a class="text-dark stretched-link" href="{{project.link}}"> {{ project.name }} </a>
-                    </h3>
-                    <p class="card-text mb-auto" align="center"> {{ project.desc }} </p>
-                </div>
-            </div>
+  <h2>Check out a few of my projects</h2>
+  <br />
+  <div class="row mb-2">
+    {% for project in projects %}
+    <div class="col-md-3">
+      <div class="card flex-md-row mb-4 shadow-sm h-md-250" href="#">
+        <div
+          class="card-body d-flex flex-column align-items-center"
+          style="height: 252px"
+        >
+          <h3 class="mt-auto mb-0">
+            <a class="text-dark stretched-link" href="{{project.link}}">
+              {{ project.name }}
+            </a>
+          </h3>
+          <p class="card-text mb-auto" align="center">{{ project.desc }}</p>
         </div>
+      </div>
     </div>
     {% endfor %}
-    <a href="/projects"> See more </a>
+  </div>
+  <a href="/projects"> See more </a>
 </div>
 
-
-<br>
-<hr class="my-4">
+<br />
+<hr class="my-4" />
 
 <!-- Blog display -->
 <div class="container my-4">
-    <h2> Check out my popular blogs </h2>
-    <br>
-    <div class="row mb-2">
-        {% for post in posts %}
-        <div class="col">
-            <div class="card flex-md-row mb-4 shadow-sm h-md-250" href="#" >
-                <div class="card-body d-flex flex-column align-items-start">
-                <h3 class="mb-0">
-                    <a class="text-dark" href="blog/{{post.slug}}"> {% if post.title|length > 76 %} {{ post.title|truncatechars:76 }} {% else %} {{post.title}} {% endif %} </a>
-                </h3>
-                <div class="mb-1 text-muted"> {{ post.upload_date|date:"M d, Y"}} </div>
-                <p class="card-text mb-auto"></p>
-                <a href="blog/{{post.slug}}">Continue reading</a>
-                </div>
-                <img src="/media/{{ post.thumbnail }}" class="bd-placeholder-img card-img-right flex-auto d-none d-lg-block" width="200" height="220" style="object-fit: cover; object-position: center;"
-                aria-label="Placeholder: Thumbnail"/>
-            </div>
+  <h2>Check out my popular blogs</h2>
+  <br />
+  <div class="row mb-2">
+    {% for post in posts %}
+    <div class="col">
+      <div class="card flex-md-row mb-4 shadow-sm h-md-250" href="#">
+        <div class="card-body d-flex flex-column align-items-start">
+          <h3 class="mb-0">
+            <a class="text-dark" href="blog/{{post.slug}}">
+              {% if post.title|length > 76 %} {{ post.title|truncatechars:76 }}
+              {% else %} {{post.title}} {% endif %}
+            </a>
+          </h3>
+          <div class="mb-1 text-muted">{{ post.upload_date|date:"M d, Y"}}</div>
+          <p class="card-text mb-auto"></p>
+          <a href="blog/{{post.slug}}">Continue reading</a>
         </div>
-        {% endfor %}
+        <img
+          src="/media/{{ post.thumbnail }}"
+          class="bd-placeholder-img card-img-right flex-auto d-none d-lg-block"
+          width="200"
+          height="220"
+          style="object-fit: cover; object-position: center"
+          aria-label="Placeholder: Thumbnail"
+        />
+      </div>
     </div>
-    <a href="blog/"> See more </a>
+    {% endfor %}
+  </div>
+  <a href="blog/"> See more </a>
 </div>
-<br><br>
+<br /><br />
 
 {% endblock body %}

@@ -10,19 +10,18 @@ from home.extra_functions.send_message import send_message
 
 
 def home(request):
+    """ Home page of the portfolio """
+    
     send_message(request)
     posts = Post.objects.order_by('-views')[:2]
-    projects = Project.objects.all()[:4]
+    projects = Project.objects.order_by('-sno')[:4]
     context = {'posts': posts, 'projects': projects}
     return render(request, 'home/home.html', context)
 
 
-def about(request):
-    send_message(request)
-    return render(request, "home/about.html")
-
-
 def contact(request):
+    """ Contact page """
+    
     send_message(request)
     if request.method == "POST":
         try:
@@ -47,7 +46,7 @@ def projects(request):
 
 
 # Authentication APIs
-def handleSignup(request):
+def handle_signup(request):
     if request.method == 'POST':
         username = request.POST['signup_username']
         fname = request.POST['first_name']
@@ -77,7 +76,10 @@ def handleSignup(request):
     return redirect('/', {})
 
 
-def handleLogin(request):
+def handle_login(request):
+    
+    """ Login and authentication"""
+    
     if request.method == 'POST':
         username = request.POST['login_username']
         password = request.POST['login_password']
@@ -96,7 +98,9 @@ def handleLogin(request):
         return HttpResponse('404 -  Not Found')
 
 
-def handleLogout(request):
+def handle_logout(request):
+    """ Handles logout """
+    
     logout(request)
     request.session['message'] = {
         'message_text': 'Logged out of your account.', 'extra_tags': ['success', 'Success!']}
