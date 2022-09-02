@@ -2,6 +2,8 @@ from django.shortcuts import render, HttpResponse, redirect
 from blog.models import BlogComment, Post
 from django.db.models import Q
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from blog.templatetags import custom_tags
 from home.extra_functions.send_message import send_message
 
@@ -40,27 +42,31 @@ def search(request):
     return render(request, "blog/search.html", context)
 
 
+@staff_member_required(login_url='/')
 def newpost(request):
-    if request.method == "POST":
-        title = request.POST['title']
-        desc = request.POST['description']
-        thumbnail = request.FILES['thumbnail']
-        content = request.POST['content']
+    if request.user.is_staff:
+        if request.method == "POST":
+            title = request.POST['title']
+            desc = request.POST['description']
+            thumbnail = request.FILES['thumbnail']
+            content = request.POST['content']
 
-        print(title, desc, content)
-        print("Thumbnail")
-        post = Post(title=title, desc=desc,
-                    thumbnail=thumbnail, content=content)
-        post.save()
+            print("Thumbnail")
+            post = Post(title=title, desc=desc,
+                        thumbnail=thumbnail, content=content)
+            post.save()
 
-        request.session['message'] = {
-            'message_text': 'Posted new blog!', 'extra_tags': ['success', 'Success!']}
+            request.session['message'] = {
+                'message_text': 'Posted new blog!', 'extra_tags': ['success', 'Success!']}
 
-        return redirect("/blog", {})
-    return render(request, "blog/newpost.html")
+            return redirect("/blog", {})
+        return render(request, "blog/newpost.html")
+    
+    return HttpResponse('404 - Not Found')
 
 
 # Comments API
+@login_required
 def postComment(request):
     if request.method == 'POST':
         comment = request.POST['comment_input']

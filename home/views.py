@@ -1,9 +1,10 @@
 from django.shortcuts import render, HttpResponse, redirect
-from home.models import Contact, Project
+from home.models import Profile, User, Project, Message
 from blog.models import Post
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from home.extra_functions.send_message import send_message
 
 # Create your views here.
@@ -22,6 +23,10 @@ def home(request):
 def contact(request):
     """ Contact page """
     
+    if request.user.is_staff:
+        messages = Message.objects.order_by('-datetime').all()
+        return render(request, 'home/messages.html', {'contact_messages': messages})
+    
     send_message(request)
     if request.method == "POST":
         try:
@@ -29,20 +34,52 @@ def contact(request):
             phone = request.POST['phone']
             email = request.POST['email']
             message = request.POST['message']
-            contact = Contact(name=name, phone=phone,
+            contact = Message(name=name, phone=phone,
                               email=email, message=message)
             contact.save()
             messages.add_message(request, messages.INFO,
                                  'Message sent!', extra_tags=['success', 'Success!'])
         except:
             messages.add_message(request, messages.INFO,
-                                 'Please check if you\'ve entered all details correctly and retry. ', extra_tags=['danger', 'Error!'])
+                                 'Please check if you\'ve entered all details correctly and retry. ', 
+                                 extra_tags=['danger', 'Error!'])
     return render(request, "home/contact.html")
 
 
 def projects(request):
     send_message(request)
-    return render(request, "home/projects.html")
+    projects = Project.objects.order_by('-sno').all()
+    context = {'projects': projects}
+    return render(request, "home/projects.html", context)
+
+
+@login_required
+def view_profile(request):
+    send_message(request)
+    if request.method == "POST":
+        try:
+            user = request.user
+            profile = Profile.objects.get(user=user)
+            user.first_name = request.POST['edit_first_name']
+            user.last_name = request.POST['edit_last_name']
+            user.email = request.POST['edit_email']
+            profile_picture = request.FILES.get('edit_profile_picture', False)
+            if profile_picture:
+                profile.profile_picture = profile_picture
+            user.save()
+            profile.save()
+            messages.add_message(request, messages.INFO, 'Profile updated successfully!', extra_tags=['success', 'Success!'])
+                        
+            
+        except:
+            messages.add_message(request, messages.INFO,
+                                 'Please check if you\'ve entered all details correctly and retry. ', 
+                                 extra_tags=['danger', 'Error!'])
+            
+    
+    return render(request, 'home/profile.html')
+    
+
 
 
 # Authentication APIs
@@ -64,10 +101,15 @@ def handle_signup(request):
 
         else:
             user = User.objects.create_user(
-                username=username, email=email, password=password)
-            user.first_name = fname
-            user.last_name = lname
+                username=username, 
+                email=email, 
+                password=password,
+                first_name = fname,
+                last_name = lname
+                )
+            profile = Profile(user=user)
             user.save()
+            profile.save()
             request.session['message'] = {
                 'message_text': 'Account created.', 'extra_tags': ['success', 'Success!']}
 

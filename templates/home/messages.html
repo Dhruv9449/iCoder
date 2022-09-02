@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %} Contact {% endblock title %}
+
+{% block contactactive %}active{% endblock contactactive %}
+{% load humanize %}
+{% block body %}
+
+<div class="container">
+    <h2 class="mt-4"> Messages </h2>
+    <div class="messages mt-3">
+        {% for message in contact_messages %}
+        <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ message.name }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{ message.datetime|naturaltime }}</h6>
+              <p class="card-text">{{message.message}}</p>
+              <p class="mb-0 card-subtitle text-muted">Email:<a href="mailto:{{message.email}}" class="card-link"> {{message.email}} </a> </p>
+              <p class="card-subtitle text-muted">Phone:<a href="tel:{{message.phone}}" class="card-link"> {{message.phone}} </a> </p>
+            </div>
+          </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock body %}
