@@ -10,14 +10,14 @@ from home.extra_functions.send_message import send_message
 # Create your views here.
 
 
-def blogHome(request):
+def blog_home(request):
     send_message(request)
     allPosts = Post.objects.order_by('-upload_date')
     context = {'posts': allPosts}
     return render(request, "blog/bloghome.html", context)
 
 
-def blogPost(request, slug):
+def blog_post(request, slug):
     post = Post.objects.filter(slug=slug).first()
     post.views += 1
     post.save()
@@ -43,7 +43,7 @@ def search(request):
 
 
 @staff_member_required(login_url='/')
-def newpost(request):
+def new_post(request):
     if request.user.is_staff:
         if request.method == "POST":
             title = request.POST['title']
@@ -67,7 +67,7 @@ def newpost(request):
 
 # Comments API
 @login_required
-def postComment(request):
+def post_comment(request):
     if request.method == 'POST':
         comment = request.POST['comment_input']
         user = request.user

@@ -3,9 +3,9 @@ from django.urls import path, include
 from blog import views
 
 urlpatterns = [
-    path('', views.blogHome, name="blogHome"),
-    path('postcomment', views.postComment, name="postComment"),
-    path('newpost', views.newpost, name="newpost"),
-    path('<str:slug>', views.blogPost, name="blogPost"),
+    path('', views.blog_home, name="blog home"),
+    path('postcomment', views.post_comment, name="post comment"),
+    path('newpost', views.new_post, name="new post"),
+    path('<str:slug>', views.blog_post, name="blog post"),
     path('search/', views.search, name="search")
 ]

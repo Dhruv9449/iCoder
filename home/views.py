@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from home.extra_functions.send_message import send_message
 
 # Create your views here.
@@ -78,7 +79,32 @@ def view_profile(request):
             
     
     return render(request, 'home/profile.html')
-    
+
+
+@staff_member_required(login_url='/')
+def new_project(request):
+    """ Add new project """
+    if request.method == "POST":
+        # try:
+        name = request.POST.get('name','')
+        desc = request.POST.get('description','')
+        link = request.POST.get('link','')
+        start_date = request.POST.get('startdate','')
+        finish_date = request.POST.get('enddate','')                
+        project = Project(name=name, desc=desc, link=link, start_date=start_date, finish_date=finish_date)
+        thumbnail = request.FILES.get('thumbnail', False)
+        print(thumbnail)
+        if thumbnail:
+            project.thumbnail = thumbnail
+        project.save()
+        messages.add_message(request, messages.INFO, 'Added project successfully!', extra_tags=['success', 'Success!'])
+        
+        # except:
+        #     messages.add_message(request, messages.INFO,
+        #                          'Please check if you\'ve entered all details correctly and retry. ', 
+        #                          extra_tags=['danger', 'Error!'])
+                 
+    return render(request, 'home/newproject.html')
 
 
 

@@ -33,13 +33,14 @@
 {% block body %}
 <div class="container my-4">
 
-    <h3 class="my-4">
+    <h2 class="my-4">
         <span> New Post </span>
         <!-- <button class="btn btn-dark float-right mx-2"> Preview </button> -->
         <button class="btn btn-dark float-right" form="newpost_form" type="submit" id="post_submit"> Post </button>
     </h3>
         
-    <form method="post" action="/blog/newpost" name="newpost_form" id="newpost_form" enctype="multipart/form-data"> {% csrf_token %}
+    <form method="post" action="/blog/newpost" name="newpost_form" id="newpost_form" enctype="multipart/form-data"> 
+        {% csrf_token %}
         <div class="row">
             <div class="col-md-9">
                 <label for="title"> Title </label>

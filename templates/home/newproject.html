@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %} New project {% endblock title %}
+
+{% block projectsactive %}active{% endblock projectsactive %}
+
+{% block body %}
+
+<div class="container my-4">
+    <h2 class="my-4">
+        New Project
+    </h2>
+    <form action="/newproject" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row my-2">
+            <div class="col-md-6">
+                <label for="name"> Name </label>
+                <input class="form-control my-2" type="text" name="name" id="name" required>
+            </div>
+
+            <div class="col-md-3">
+                <label for="startdate"> Start date </label>
+                <input type="date" class="form-control my-2" id="startdate" name="startdate" required>
+            </div>
+
+            <div class="col-md-3">
+                <label for="enddate"> End date </label>
+                <input type="date" class="form-control my-2" id="enddate" name="enddate" required>
+            </div>
+        </div>
+        
+        <div class="row my-2">
+            <div class="col-md-8">
+                <label for="link"> Link </label>
+                <input class="form-control my-2" type="text" name="link" id="link" required>
+            </div>
+
+            <div class="col-md-4">
+                <label for="thumbnail"> Thumbnail </label>
+                <input type="file" class="form-control-file my-2" name="thumbnail" id="thumbnail" accept=".jpg, .jpeg, .png">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="description"> Description </label>
+            <textarea class="form-control" id="description" name="description" rows="10" minlength="10"></textarea>
+        </div>
+        <button type="submit" class="btn btn-dark"> Add project </button>
+    </form>
+</div>
+
+<style>
+    .form-control:focus {
+      border-color: black;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 0, 0, 0.6);
+    }
+    
+</style>
+
+{% endblock body %}
