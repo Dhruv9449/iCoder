@@ -10,7 +10,7 @@
     <h2 class="mt-4"> Messages </h2>
     <div class="messages mt-3">
         {% for message in contact_messages %}
-        <div class="card">
+        <div class="card my-3">
             <div class="card-body">
               <h5 class="card-title">{{ message.name }}</h5>
               <h6 class="card-subtitle mb-2 text-muted">{{ message.datetime|naturaltime }}</h6>

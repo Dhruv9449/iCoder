@@ -33,7 +33,6 @@ SECRET_KEY = DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = DEBUG_ENV
-print(DEBUG)
 
 ALLOWED_HOSTS = ALLOWED_HOSTS_ENV
 
