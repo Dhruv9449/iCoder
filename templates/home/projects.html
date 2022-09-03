@@ -14,17 +14,19 @@
     {% for project in projects %}
     <div class="row mb-2">
         <div class="col">
-            <div class="card flex-md-row mb-4 shadow-sm h-md-250" href="#" >
+            <div class="card flex-md-row mb-4 shadow-sm h-md-250" href="{{project.link}}">
                 <div class="card-body d-flex flex-column align-items-start">
                 <h3 class="mb-0">
                     <a class="text-dark" href="{{project.link}}"> {{ project.name }} </a>
                 </h3>
                 <div class="mb-1 text-muted"> {{ project.start_date|date:"M, Y"}} - {{ project.finish_date|date:"M, Y" }}</div>
                 <p class="card-text mb-auto"> {{ project.desc|slice:":230"}} </p>
-                <a href="{{project.slug}}"> View on github </a>
+                <a href="{{project.link}}"> View on github </a>
                 </div>
+                
                 <img src="/media/{{ project.thumbnail }}" class="bd-placeholder-img card-img-right flex-auto d-none d-lg-block" width="200" height="210" style="object-fit: cover; object-position: center;"
                 aria-label="Placeholder: Thumbnail"/>
+                
             </div>
         </div>
     </div>

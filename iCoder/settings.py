@@ -15,7 +15,11 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
-DJANGO_SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+getvar = os.getenv
+
+DJANGO_SECRET_KEY = getvar('DJANGO_SECRET_KEY')
+DEBUG_ENV = bool(int(getvar('DEBUG')))
+ALLOWED_HOSTS_ENV = getvar('ALLOWED_HOSTS').split(',')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,9 +32,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = DEBUG_ENV
+print(DEBUG)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ALLOWED_HOSTS_ENV
 
 
 # Application definition
@@ -62,7 +67,7 @@ ROOT_URLCONF = 'iCoder.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,9 +130,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static"
-]
+if DEBUG:
+    STATICFILES_DIRS = [
+        BASE_DIR / "static"
+    ]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"

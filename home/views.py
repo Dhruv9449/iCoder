@@ -25,8 +25,8 @@ def contact(request):
     """ Contact page """
     
     if request.user.is_staff:
-        messages = Message.objects.order_by('-datetime').all()
-        return render(request, 'home/messages.html', {'contact_messages': messages})
+        contact_messages = Message.objects.order_by('-datetime').all()
+        return render(request, 'home/messages.html', {'contact_messages': contact_messages})
     
     send_message(request)
     if request.method == "POST":
@@ -93,7 +93,6 @@ def new_project(request):
         finish_date = request.POST.get('enddate','')                
         project = Project(name=name, desc=desc, link=link, start_date=start_date, finish_date=finish_date)
         thumbnail = request.FILES.get('thumbnail', False)
-        print(thumbnail)
         if thumbnail:
             project.thumbnail = thumbnail
         project.save()
